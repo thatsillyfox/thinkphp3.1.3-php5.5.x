@@ -125,7 +125,8 @@ class TagLib {
                 $condition  =   preg_replace('/\$(\w+)\.(\w+)\s/is','(is_array($\\1)?$\\1["\\2"]:$\\1->\\2) ',$condition);
         }
         if(false !== strpos($condition, '$Think'))
-            $condition      =   preg_replace('/(\$Think.*?)\s/ies',"\$this->parseThinkVar('\\1');" , $condition);        
+            //$condition      =   preg_replace('/(\$Think.*?)\s/ies',"\$this->parseThinkVar('\\1');" , $condition);
+            $condition      =   preg_replace_callback('/(\$Think.*?)\s/is',function($r){return $this->parseThinkVar($r[1]);} , $condition);
         return $condition;
     }
 
