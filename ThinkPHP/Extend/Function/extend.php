@@ -299,17 +299,13 @@ function ubb($Text) {
   $Text=preg_replace("/\[sub\](.+?)\[\/sub\]/is","<sub>\\1</sub>",$Text);
   $Text=preg_replace("/\[pre\](.+?)\[\/pre\]/is","<pre>\\1</pre>",$Text);
   $Text=preg_replace("/\[email\](.+?)\[\/email\]/is","<a href='mailto:\\1'>\\1</a>",$Text);
-  //$Text=preg_replace("/\[colorTxt\](.+?)\[\/colorTxt\]/eis","color_txt('\\1')",$Text);
   $Text=preg_replace_callback("/\[colorTxt\](.+?)\[\/colorTxt\]/is",function($r){return color_txt($r[1]);},$Text);
-//  $Text=preg_replace("/\[emot\](.+?)\[\/emot\]/eis","emot('\\1')",$Text);
   $Text=preg_replace_callback("/\[emot\](.+?)\[\/emot\]/is",function($r){return emot($r[1]);},$Text);
   $Text=preg_replace("/\[i\](.+?)\[\/i\]/is","<i>\\1</i>",$Text);
   $Text=preg_replace("/\[u\](.+?)\[\/u\]/is","<u>\\1</u>",$Text);
   $Text=preg_replace("/\[b\](.+?)\[\/b\]/is","<b>\\1</b>",$Text);
   $Text=preg_replace("/\[quote\](.+?)\[\/quote\]/is"," <div class='quote'><h5>引用:</h5><blockquote>\\1</blockquote></div>", $Text);
-//  $Text=preg_replace("/\[code\](.+?)\[\/code\]/eis","highlight_code('\\1')", $Text);
   $Text=preg_replace_callback("/\[code\](.+?)\[\/code\]/is",function($r){return highlight_code($r[1]);}, $Text);
-//  $Text=preg_replace("/\[php\](.+?)\[\/php\]/eis","highlight_code('\\1')", $Text);
   $Text=preg_replace_callback("/\[php\](.+?)\[\/php\]/is",function($r){return highlight_code($r[1]);}, $Text);
   $Text=preg_replace("/\[sig\](.+?)\[\/sig\]/is","<div class='sign'>\\1</div>", $Text);
   $Text=preg_replace("/\\n/is","<br/>",$Text);

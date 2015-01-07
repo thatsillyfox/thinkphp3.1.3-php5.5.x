@@ -39,7 +39,6 @@ class App {
             define('ACTION_NAME',  !empty($params)?array_shift($params):C('DEFAULT_ACTION'));
             if(count($params)>1) {
                 // 解析剩余参数 并采用GET方式获取
-//                preg_replace('@(\w+),([^,\/]+)@e', '$_GET[\'\\1\']="\\2";', implode(',',$params));
                 preg_replace_callback('@(\w+),([^,\/]+)@',function($r){$_GET[$r[1]]=$r[2];}, implode(',',$params));
             }
         }else{// 默认URL模式 采用 index.php module action id 4
@@ -48,7 +47,6 @@ class App {
             define('ACTION_NAME',    isset($_SERVER['argv'][2])?$_SERVER['argv'][2]:C('DEFAULT_ACTION'));
             if($_SERVER['argc']>3) {
                 // 解析剩余参数 并采用GET方式获取
-//                preg_replace('@(\w+),([^,\/]+)@e', '$_GET[\'\\1\']="\\2";', implode(',',array_slice($_SERVER['argv'],3)));
                 preg_replace_callback('@(\w+),([^,\/]+)@',function($r){$_GET[$r[1]]=$r[2];}, implode(',',array_slice($_SERVER['argv'],3)));
             }
         }

@@ -225,15 +225,13 @@ class ETCore{
  		
  		//Fix 模板中金钱符号
  		$ShowTPL = str_replace('$','\$',$ShowTPL);
- 		
+		$that = $this;
 			//修复php运行错误
-//			$ShowTPL = @preg_replace("/\";(.+?)echo\"/e", '$this->FixPHP(\'\\1\')', $ShowTPL);
-			$ShowTPL = @preg_replace_callback("/\";(.+?)echo\"/", function($r){return $this->FixPHP($r[1]);}, $ShowTPL);
+			$ShowTPL = @preg_replace_callback("/\";(.+?)echo\"/", function($r)use($that){return $that->FixPHP($r[1]);}, $ShowTPL);
 
 			//Fix Run 2
 			if ($run==1){
-//				$ShowTPL = preg_replace("/\(T_T\)(.+?)\(T_T!\)/ise", '$this->FixPHP(\'\\1\')', $ShowTPL);
-				$ShowTPL = preg_replace_callback("/\(T_T\)(.+?)\(T_T!\)/is",function($r){return $this->FixPHP($r[1]);}, $ShowTPL);
+				$ShowTPL = preg_replace_callback("/\(T_T\)(.+?)\(T_T!\)/is",function($r)use($that){return $that->FixPHP($r[1]);}, $ShowTPL);
 			}
 			
 			//还原xml
@@ -358,8 +356,8 @@ class ETCore{
 	function inc_preg(
 				$content
 			){
-//		return preg_replace('/<\!--\s*\#include\s*file\s*=(\"|\')([a-zA-Z0-9_\.\|]{1,100})(\"|\')\s*-->/eis', '$this->inc("\\2")', preg_replace('/(\{\s*|<!--\s*)inc\:([^\{\} ]{1,100})(\s*\}|\s*-->)/eis', '$this->inc("\\2")', $content));
-		return preg_replace_callback('/<\!--\s*\#include\s*file\s*=(\"|\')([a-zA-Z0-9_\.\|]{1,100})(\"|\')\s*-->/is',function($r){return $this->inc($r[2]);}, preg_replace('/(\{\s*|<!--\s*)inc\:([^\{\} ]{1,100})(\s*\}|\s*-->)/is',function($r){return $this->inc($r[2]);}, $content));
+		$that = $this;
+		return preg_replace_callback('/<\!--\s*\#include\s*file\s*=(\"|\')([a-zA-Z0-9_\.\|]{1,100})(\"|\')\s*-->/is',function($r)use($that){return $that->inc($r[2]);}, preg_replace('/(\{\s*|<!--\s*)inc\:([^\{\} ]{1,100})(\s*\}|\s*-->)/is',function($r)use($that){return $that->inc($r[2]);}, $content));
 	}
 
 

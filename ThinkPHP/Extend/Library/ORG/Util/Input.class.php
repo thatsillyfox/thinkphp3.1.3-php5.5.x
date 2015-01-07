@@ -216,17 +216,6 @@ class Input {
      */
     static public function makeLink($string) {
         $validChars = "a-z0-9\/\-_+=.~!%@?#&;:$\|";
-        /*$patterns = array(
-                        "/(^|[^]_a-z0-9-=\"'\/])([a-z]+?):\/\/([{$validChars}]+)/ei",
-                        "/(^|[^]_a-z0-9-=\"'\/])www\.([a-z0-9\-]+)\.([{$validChars}]+)/ei",
-                        "/(^|[^]_a-z0-9-=\"'\/])ftp\.([a-z0-9\-]+)\.([{$validChars}]+)/ei",
-                        "/(^|[^]_a-z0-9-=\"'\/:\.])([a-z0-9\-_\.]+?)@([{$validChars}]+)/ei");
-        $replacements = array(
-                        "'\\1<a href=\"\\2://\\3\" title=\"\\2://\\3\" rel=\"external\">\\2://'.Input::truncate( '\\3' ).'</a>'",
-                        "'\\1<a href=\"http://www.\\2.\\3\" title=\"www.\\2.\\3\" rel=\"external\">'.Input::truncate( 'www.\\2.\\3' ).'</a>'",
-                        "'\\1<a href=\"ftp://ftp.\\2.\\3\" title=\"ftp.\\2.\\3\" rel=\"external\">'.Input::truncate( 'ftp.\\2.\\3' ).'</a>'",
-                        "'\\1<a href=\"mailto:\\2@\\3\" title=\"\\2@\\3\">'.Input::truncate( '\\2@\\3' ).'</a>'");
-        return preg_replace($patterns, $replacements, $string);*/
         $string=preg_replace_callback("/(^|[^]_a-z0-9-=\"'\/])([a-z]+?):\/\/([{$validChars}]+)/i", function($r){return "'{$r[1]}<a href=\"{$r[2]}://{$r[3]}\" title=\"{$r[2]}://{$r[3]}\" rel=\"external\">{$r[2]}://'.Input::truncate( '{$r[3]}' ).'</a>'";}, $string);
         $string=preg_replace_callback("/(^|[^]_a-z0-9-=\"'\/])www\.([a-z0-9\-]+)\.([{$validChars}]+)/i", function($r){return "'{$r[1]}<a href=\"http://www.{$r[2]}.{$r[3]}\" title=\"www.{$r[2]}.{$r[3]}\" rel=\"external\">'.Input::truncate( 'www.{$r[2]}.{$r[3]}' ).'</a>'";}, $string);
         $string=preg_replace_callback("/(^|[^]_a-z0-9-=\"'\/])ftp\.([a-z0-9\-]+)\.([{$validChars}]+)/i", function($r){return "'{$r[1]}<a href=\"ftp://ftp.{$r[2]}.{$r[3]}\" title=\"ftp.{$r[2]}.{$r[3]}\" rel=\"external\">'.Input::truncate( 'ftp.{$r[2]}.{$r[3]}' ).'</a>'";}, $string);

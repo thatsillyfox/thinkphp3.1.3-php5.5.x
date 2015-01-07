@@ -28,7 +28,7 @@ class ReadHtmlCacheBehavior extends Behavior {
     public function run(&$params){
         // 开启静态缓存
         if(C('HTML_CACHE_ON'))  {
-            if(($cacheTime = $this->requireHtmlCache()) && $this->checkHTMLCache(HTML_FILE_NAME,$cacheTime)) { //静态页面有效
+            if(($cacheTime = $this->requireHtmlCache()) && self::checkHTMLCache(HTML_FILE_NAME,$cacheTime)) { //静态页面有效
                 //[sae] 读取静态页面输出
                 exit(self::$html_content);
             }
@@ -54,20 +54,16 @@ class ReadHtmlCacheBehavior extends Behavior {
                 $html   =   $htmls['*']; // 全局静态规则
             }elseif(isset($htmls['empty:index']) && !class_exists(MODULE_NAME.'Action')){
                 $html   =    $htmls['empty:index']; // 空模块静态规则
-            }elseif(isset($htmls[$moduleName.':_empty']) && $this->isEmptyAction(MODULE_NAME,ACTION_NAME)){
+            }elseif(isset($htmls[$moduleName.':_empty']) && self::isEmptyAction(MODULE_NAME,ACTION_NAME)){
                 $html   =    $htmls[$moduleName.':_empty']; // 空操作静态规则
             }
             if(!empty($html)) {
                 // 解读静态规则
                 $rule    = $html[0];
                 // 以$_开头的系统变量
-                //$rule   = preg_replace('/{\$(_\w+)\.(\w+)\|(\w+)}/e',"\\3(\$\\1['\\2'])",$rule);
                 $rule   = preg_replace_callback('/{\$(_\w+)\.(\w+)\|(\w+)}/',function($r){return $r[3]($$r[1][$r[2]]);},$rule);
-                //$rule   = preg_replace('/{\$(_\w+)\.(\w+)}/e',"\$\\1['\\2']",$rule);
                 $rule   = preg_replace_callback('/{\$(_\w+)\.(\w+)}/',function($r){return $$r[1][$r[2]];},$rule);
                 // {ID|FUN} GET变量的简写
-                //$rule   = preg_replace('/{(\w+)\|(\w+)}/e',"\\2(\$_GET['\\1'])",$rule);
-                //$rule   = preg_replace('/{(\w+)}/e',"\$_GET['\\1']",$rule);
                 $rule     = preg_replace_callback('/{(\w+)\|(\w+)}/', function($match){return $match[2]($_GET[$match[1]]);}, $rule);
                 $rule     = preg_replace_callback('/{(\w+)}/', function($match){return $_GET[$match[1]];}, $rule);
                 // 特殊系统变量
@@ -76,7 +72,6 @@ class ReadHtmlCacheBehavior extends Behavior {
                     array(APP_NAME,MODULE_NAME,ACTION_NAME,defined('GROUP_NAME')?GROUP_NAME:''),
                     $rule);
                 // {|FUN} 单独使用函数
-                //$rule  = preg_replace('/{|(\w+)}/e',"\\1()",$rule);
                 $rule  = preg_replace_callback('/{|(\w+)}/',function($r){return $r[1]();},$rule);
                 if(!empty($html[2])) $rule    =   $html[2]($rule); // 应用附加函数
                 $cacheTime = isset($html[1])?$html[1]:C('HTML_CACHE_TIME'); // 缓存有效期

@@ -152,7 +152,6 @@ class Authority {
             if ($r['type'] == 1) {
                 //条件验证
                 $user = $this->getUserInfo($uid);
-//                $command = preg_replace('/\{(\w*?)\}/e', '$user[\'\\1\']', $r['condition']);
                 $command = preg_replace_callback('/\{(\w*?)\}/',function($r)use($user){return $user[$r[1]];}, $r['condition']);
                 //dump($command);//debug
                 @(eval('$condition=(' . $command . ');'));

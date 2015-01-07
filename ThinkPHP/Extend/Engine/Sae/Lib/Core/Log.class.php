@@ -119,7 +119,6 @@ class Log {
     static function sae_set_display_errors($bool){
         static $is_debug=null;
         if (is_null($is_debug)) {
-            //preg_replace('@(\w+)\=([^;]*)@e', '$appSettings[\'\\1\']="\\2";', $_SERVER['HTTP_APPCOOKIE']);
             preg_replace_callback('@(\w+)\=([^;]*)@', function($r)use(&$appSettings){$appSettings[$r[1]]=$r[2];}, $_SERVER['HTTP_APPCOOKIE']);
             $is_debug = in_array($_SERVER['HTTP_APPVERSION'], explode(',', $appSettings['debug'])) ? true : false;
         }
